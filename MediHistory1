@@ -1,0 +1,73 @@
+import java.sql.*;
+
+// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
+// then press Enter. You can now see whitespace characters in your code.
+class Alter{
+    public void alter(String a) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String Date= a;
+        String query="ALTER TABLE patient drop ID;";
+        int rs=st.executeUpdate(query);
+    }
+
+}
+class Retrive{
+    public void retrive(int id) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="Select * from patient where id= "+id+";";
+        ResultSet rs=st.executeQuery(query);
+       // System.out.print(rs);
+        while(rs.next())
+        {
+            int a=rs.getInt(1);
+            if(a==id)
+            {
+                break;
+            }
+        }
+            System.out.println(rs.getInt(1));
+            System.out.println(rs.getString(2));
+            System.out.println(rs.getString(3));
+            System.out.println(rs.getInt(4));
+
+    }
+}
+class Insert{
+    public void insert(int id,String name,String Address,int PNo) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        int i=id,p=PNo;
+        String n=name,a=Address;
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="insert into patient values (" + i +",'" + n +"','" +a+"',"+ p +");";
+        int rs=st.executeUpdate(query);
+    }
+}
+public class Main {
+    public static void main(String[] args) throws SQLException {
+//        Insert i=new Insert();
+//        i.insert(8,"harold","ooty",785281478);
+//        Retrive r=new Retrive();
+//        r.retrive(5);
+//        Alter a=new Alter();
+//        a.alter("11/12/2002");
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        int a=5;
+        String query="delete from patient where pid ="+a+";";
+        int rs=st.executeUpdate(query);
+    }
+}

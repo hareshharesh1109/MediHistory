@@ -55,12 +55,12 @@ class Insert{
 }
 public class Main {
     public static void main(String[] args) throws SQLException {
-//        Insert i=new Insert();
-//        i.insert(8,"harold","ooty",785281478);
-//        Retrive r=new Retrive();
-//        r.retrive(5);
-//        Alter a=new Alter();
-//        a.alter("11/12/2002");
+        Insert i=new Insert();
+        i.insert(8,"harold","ooty",785281478);
+        Retrive r=new Retrive();
+        r.retrive(5);
+        Alter a=new Alter();
+        a.alter("11/12/2002");
         String url="jdbc:mysql://localhost:3306/MediHistory";
         String Uname="root";
         String pass="root";

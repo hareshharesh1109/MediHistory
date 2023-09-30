@@ -1,0 +1,204 @@
+import java.sql.*;
+import java.util.Scanner;
+
+// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
+// then press Enter. You can now see whitespace characters in your code.
+class HInsert{
+    public  void insert(String dc,String his,String v) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="INSERT INTO " + v + " VALUES ('" + dc + "','" + his + "');";
+        int rs=st.executeUpdate(query);
+    }
+}
+class Get{
+    public String check(int t) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="Select * from patients where id= "+t+";";
+        ResultSet rs=st.executeQuery(query);
+        // System.out.print(rs);
+        while(rs.next())
+        {
+            int a=rs.getInt(1);
+            if(a==t)
+            {
+                break;
+            }
+        }
+        String A=rs.getString(5);
+        return A;
+    }
+
+}
+class Retrive{
+    public void retrive(int id) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="Select * from patients where id= "+id+";";
+        ResultSet rs=st.executeQuery(query);
+       // System.out.print(rs);
+        while(rs.next())
+        {
+            int a=rs.getInt(1);
+            if(a==id)
+            {
+                break;
+            }
+        }
+            System.out.println("ID is " +rs.getInt(1));
+            System.out.println("Name is "+rs.getString(2));
+            System.out.println("Adress id "+rs.getString(3));
+            System.out.println("Phone No is "+rs.getInt(4));
+            System.out.println("Blood Group is "+rs.getString(6));
+
+    }
+}
+class RetriveRecord{
+    public void retrive(String Uid) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="Select * from "+Uid+";";
+        ResultSet rs=st.executeQuery(query);
+        while(rs.next()) {
+            System.out.println("DATE is " + rs.getString(1));
+            System.out.println("DETAIL is: " + rs.getString(2));
+        }
+    }
+}
+class RetriveBlood{
+    public void retrive(String b) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String query="Select * from patients where Bloodgroup= '"+b+"';";
+        ResultSet rs=st.executeQuery(query);
+        try {
+            while (rs.next()) {
+//                String a = rs.getString(6);
+//                boolean r = a.equals(b);
+//                if (r) {
+                    System.out.println("Name is " + rs.getString(2));
+                    System.out.println("Adress is " + rs.getString(3));
+                    System.out.println("Phone No is " + rs.getInt(4));
+                    System.out.println("Blood Group is " + rs.getString(6));
+                    System.out.println("_____________________________________________");
+             //   }
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("HERE"+e);
+        }
+    }
+}
+class Insert{
+    public void insert(int id,String name,String Address,int PNo,String PID,String BG) throws SQLException {
+        String url="jdbc:mysql://localhost:3306/MediHistory";
+        String Uname="root";
+        String pass="root";
+        int i=id,p=PNo;
+        String n=name,a=Address,unique=PID,Bg=BG;
+        Connection con= DriverManager.getConnection(url,Uname,pass);
+        Statement st= con.createStatement();
+        String tableName=String.valueOf(i);
+        String query="insert into patients values (" + i +",'" + n +"','" +a+"',"+ p +",'" + unique +"','"+Bg+"');";
+        String query1="CREATE TABLE " + unique + " (date_column VARCHAR(15), HISTORY VARCHAR(100));";
+        boolean status=st.execute(query1);
+        int rs=st.executeUpdate(query);
+    }
+}
+public class Main {
+    public static void main(String[] args) throws SQLException {
+            Scanner sc=new Scanner(System.in);
+            while(true)
+            {
+            System.out.println("Press 1 to Insert new Patient Details");
+            System.out.println("Press 2 to Insert  Patient Record");
+            System.out.println("Press 3 to Retrive  Patient Details");
+            System.out.println("Press 4  to Retrive  Patient Record");
+            System.out.println("Press 5  to Retrive  Patients Blood Group");
+            int t=sc.nextInt();
+            if(t==1)
+            {
+                Insert i=new Insert();
+                System.out.println("Enter Your ID");
+                int id=sc.nextInt();
+                sc.nextLine();
+                System.out.println("Enter Your Name");
+                String name=sc.nextLine();
+                System.out.println("Enter your Address");
+                String Address=sc.nextLine();
+                System.out.println("Enter your Phone Number");
+                int PNo=sc.nextInt();
+                sc.nextLine();
+                System.out.println("Enter the unique ID");
+                String PID=sc.nextLine();
+                System.out.println("Enter your Blood Group");
+                String BG=sc.nextLine();
+                i.insert(id,name,Address,PNo,PID,BG);
+                sc.nextLine();
+            }
+            if(t==2)
+            {
+                System.out.println("Enter the Patient ID to Insert");
+                int id=sc.nextInt();
+                sc.nextLine();
+                Get g=new Get();
+                String UID=g.check(id);
+               // System.out.println(UID);
+                System.out.println("Enter Today Date in the Format(DD/MM/YY):");
+                String a=sc.nextLine();
+                System.out.println("Enter today patient History and prescription given");
+                String b=sc.nextLine();
+                HInsert hi=new HInsert();
+                hi.insert(a,b,UID);
+                sc.nextLine();
+            }
+            if(t==3)
+            {
+                System.out.println("Enter the Patient ID to Retrive");
+                int id=sc.nextInt();
+                sc.nextLine();
+                Retrive r=new Retrive();
+                r.retrive(id);
+                sc.nextLine();
+            }
+            if(t==4)
+            {
+                System.out.println("Enter the Patient ID to Retrive");
+                int id=sc.nextInt();
+                sc.nextLine();
+                Get g=new Get();
+                String A=g.check(id);
+                RetriveRecord rr=new RetriveRecord();
+                rr.retrive(A);
+                sc.nextLine();
+            }
+            if(t==5)
+            {
+                System.out.println("Enter the Blood Group to Check");
+                String b=sc.nextLine();
+                RetriveBlood rb=new RetriveBlood();
+                rb.retrive(b);
+                sc.nextLine();
+            }
+        }
+//        Retrive r=new Retrive();
+//        r.retrive(15);
+    }
+}
